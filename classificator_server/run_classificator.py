@@ -23,21 +23,7 @@ import pickle
 import random
 import subprocess
 
-# Instantiate app and nav bar
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-nav = Navigation(app)
-nav.Bar('top', [
-    nav.Item('Home', 'index'),
-    nav.Item('Configure Project', 'configure', {'page': 1}),
-    nav.Item('Project Hub', 'projects', {'page': 2}),
-    nav.Item('About', 'about', {'page': 3}),
-    nav.Item('The Pipeline', 'pipeline', {'page': 4}),
-    nav.Item('API', 'api_ref', {'page': 5}),
-])
-processes = {}
-
+# Get working directory to assemble paths
 try:
     cwd = os.path.dirname(__file__)
 except:
@@ -52,6 +38,21 @@ html_path = "/var/www/html/classificator"
 # For file uploads
 UPLOAD_FOLDER = "{0}/file_uploads".format(html_path)
 ALLOWED_EXTENSIONS = set(["tsv", "csv"])
+
+# Instantiate app and nav bar
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+nav = Navigation(app)
+nav.Bar('top', [
+    nav.Item('Home', 'index'),
+    nav.Item('Configure Project', 'configure', {'page': 1}),
+    nav.Item('Project Hub', 'projects', {'page': 2}),
+    nav.Item('About', 'about', {'page': 3}),
+    nav.Item('The Pipeline', 'pipeline', {'page': 4}),
+    nav.Item('API', 'api_ref', {'page': 5}),
+])
+processes = {}
 
 #########################
 ### Utility Functions ###

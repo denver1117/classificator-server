@@ -1,8 +1,11 @@
-DIRPATH="../classificator"
+#!/usr/bin/env bash
+
+DIRPATH="classificator_server"
+PYTHON="/usr/bin/python"
 
 if [ "$1" != "no-install" ]
 then
-    sudo /usr/bin/python -m pip install -r $DIRPATH/requirements.txt
+    sudo $PYTHON -m pip install -r $DIRPATH/requirements.txt
     sudo apt-get update
     sudo apt-get -y install apache2
     sudo apt-get -y install libapache2-mod-wsgi
@@ -22,5 +25,5 @@ sudo chmod 777 /tmp
 sudo cp $DIRPATH/build/apache_config.txt /etc/apache2/sites-enabled/000-default.conf
 sudo apachectl restart
 sudo rm -rf /var/log/apache2/error.log
-python $DIRPATH/cleanup/cleanup_daemon.py stop
-python $DIRPATH/cleanup/cleanup_daemon.py start
+$PYTHON $DIRPATH/cleanup/cleanup_daemon.py stop
+$PYTHON $DIRPATH/cleanup/cleanup_daemon.py start
