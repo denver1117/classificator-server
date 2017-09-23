@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+    .data-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+    }
+    .data-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table tbody td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table-highlight tbody tr:hover {
+        background-color: #CCE7E7;
+    }
+    #table-wrapper {
+        position:relative;
+    }
+    #table-scroll {
+        height:800px;
+        overflow:auto;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    #table-wrapper table {
+        width:100%;
+    }
+    #table-wrapper-hor {
+        position:relative;
+    }
+    #table-scroll-hor {
+        width:500px;
+        height:350px;
+        overflow:auto;
+        margin-left:20px;
+        margin-right:20px;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    #table-wrapper-hor table {
+        height:100%;
+        width:100%;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body background="{{ url_for('static',filename='images/background.jpg') }}">
+      <br><br>
+      <div style = "padding:20px" align = "center">
+      <fieldset class="fieldset-auto-width">
+          <h2 align = "left"> The data load went really well </h2>
+          <h4 align = "left"> Now for each field, choose a featurization or label method according to the methodology explanations </h4>
+          <br><br>
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+          <legend class = "fieldset_legend"> Methodology Explanations </legend>
+              <p style="width:800px"> 
+              The Classificator needs a designation for each input column from your dataset.  
+              It can either ignore fields, turn them into features, use them as a classification target, 
+              or use them as splitting groups for cross validation.  Each field method is explained here.
+              </p>
+              <br>
+              <p> <b>none</b> -- ignore this column for the entire training exercise </p>
+              <p> <b>vectorize</b> -- vectorize text as features using a vectorization method specified later 
+              (use this for a large text corpus where new unseen values might be passed at prediction time)
+              </p>
+              <p> <b>encode</b> -- encode text as features using 
+              <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html">OneHot Encoder</a>
+              (use this for a small set of unique text values where new unseen values will not be passed at prediction time)
+              </p>
+              <p> <b>numeric</b> -- numeric values to be included in the feature space 
+              (use this for numeric only column that needs no vectorization to be included in the feature space)
+              </p>
+              <p> <b>group</b> -- label field used for <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html"> GroupKFold</a>
+              (use this if you have a field not used in the feature space or the classification target which can be used to group records)
+              </p>
+              <p> <b>label</b> -- label field containing the classification target </p>
+          </fieldset>
+          <br><br>
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+          <legend class = "fieldset_legend"> Data Info </legend>
+              <p style="width:500px"> 
+              Here is some metadata collected from your input dataset.
+              </p>
+              <br>
+              <div id="table-wrapper-hor">
+              <div id="table-scroll-hor">
+              <table class="data-table data-table-highlight">
+                <tr>
+                {% for value in result['info_columns'] %}
+                <th> {{ value }} </th>
+                {% endfor %}
+                </tr>
+                {% for value in result['info_values'] %}
+                <tr>
+                  {% for val in value %}
+                  <td> {{ val }} </td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </table>
+              </div>
+              </div>
+          </fieldset>
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px;width:500px">
+          <legend class = "fieldset_legend"> Field Configuration </legend>
+          <form action="../configure_training" method="POST">
+              <p style="width:500px">
+                The Classificator made an attempt to infer the field configuration
+                of your input data.  It can make mistakes (can't we all?)
+                and it also can't read your mind,
+                so make sure to check it out and confirm that each field matches
+                the methodology explanations above as you would expect.
+                <br><br>
+                Additionally, you can group the features into any of 3 feature groups.  Each
+                feature group will train a seperate model, concatenating the feature spaces contained
+                within the group, and fitting a moel to that feature space.  Then each feature group's
+                model will run a <b>predict_proba()</b> method, transforming that feature space into 
+                feature arrays of size (n_samples, n_classes) containing probability scores.  The scores
+                of all of the feature groups will then be concatenated into a final feature space used
+                to fit a combined model.  The combined model is a sophisticated voter model that simply
+                fits a decision forest to the features.  This combined model is the final model used for
+                prediction.  To ignore feature grouping, simply leave all of the fields checked as feature
+                group "A".
+              </p>
+              <br>
+              <input type ="hidden" name = "data_specs__run_name" value = "{{run_name}}" required/>
+              {% for value in result['index'] %}
+                <fieldset align = "left" class="fieldset-auto-width" style="padding:20px">
+                <p> {{result['columns'][value]}} 
+                  <select name = "data_specs__methods__{{result['columns'][value]}}">
+                    {% for val in result['select_index'] %}
+                      <option {{result['select_options'][value][val]}}>{{result['select_visible'][val]}}</option>
+                    {% endfor %}
+                  </select>
+                  <p style="display:inline-block"> Feature Groups <br>
+                      A <input style = "align:left" type="checkbox" name="data_specs__{{result['columns'][value]}}__a" checked> 
+                      B <input style = "align:left" type="checkbox" name="data_specs__{{result['columns'][value]}}__b">  
+                      C <input style = "align:left" type="checkbox" name="data_specs__{{result['columns'][value]}}__c"> 
+                  </p>
+                </p>
+                </fieldset >
+                {% if not value%2 == 0 %}
+                  <br><br>
+                {% endif %}
+              {% endfor %}
+              <br><br>
+              <p align = "center" title = "Continute on to configure training run">
+              <input type="submit" value="Configure Training" class="button button1"></p>
+          </form>
+          </fieldset>
+      </div>
+      </fieldset>
+      <br><br>
+      <div align = "center">
+      <fieldset class="fieldset-auto-width">
+          <h3 align = "left"> Sample Records </h3>
+          <h4 align = "left"> Inspect a random sample of 1k records to confirm that this is the data file that you had in mind </h4>
+          <br><br>
+          <div id="table-wrapper">
+          <div id="table-scroll">
+          <table class="data-table data-table-highlight">
+            <tr>
+            {% for value in result['columns'] %}
+            <th> {{ value }} </th>
+            {% endfor %}
+            </tr>
+            {% for value in result['values'] %}
+            <tr>
+              {% for val in value %}
+              <td> {{ val }} </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+          </div>
+          </div>
+      </fieldset>
+      </div>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br> 
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+    input, select {
+        width: 100%;
+        padding: 8px 12px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size:12px;
+        vertical-align: top;
+    }
+    p {
+        font-size:12px;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+   <body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+      <br><br>
+      <fieldset class="fieldset-auto-width" align = "center">
+      <h2 align = "left"> Okay great now the model is training </h2> 
+      <h4 align = "left"> Machine learning is happening now </h4>
+      <div align = "left">
+      <fieldset class="fieldset-auto-width" style = "align:left">
+        <p align = "left" title = "Cancel this model run. Experimental feature, does not always work but it will let you know whether it killed your run or not.">
+          <button style = "align:left" class="button button1" onclick="window.location.href='../kill_run?run_name={{ result['data_specs__run_name'] }}'">Kill Model Run</button>
+          <br><b>Beta Feature</b> <br> (It doesn't always work) 
+        </P>
+      </fieldset>
+      </div>
+      <br>
+      <div align = "top">
+          <fieldset class="fieldset-auto-width" name = "logs" align = "left">
+              <h3>Realtime Model Run Logs</h3> <a href="../logs?run_name={{ result['data_specs__run_name'] }}">Log Permalink</a>
+              <iframe src="../logs?run_name={{ result['data_specs__run_name'] }}" frameBorder="0" type="text" height = "500px" width="800px"></iframe>
+          </fieldset>
+      <br><br>
+      <form action = "../view_results" method = "POST" align = "left"> 
+        <input type ="hidden" name = "data_specs__run_name" value = "{{ result['data_specs__run_name'] }}" required/>
+        <p title = "Submit configuration and kick off model training session. Wait until the 'Finished' log message displays.">
+        <input type = "submit" value = "View Detailed Results (wait until the model run completes)" class = "button button1"/>
+        </p>
+      </form>
+      </fieldset>
+      </div>
+   </body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

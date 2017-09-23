@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+      <br><br>
+      <fieldset align = "center" class="fieldset-auto-width">
+      <h1 style = "padding:10px;display:inline-block"> Classificator </h1>
+      <h3 style = "padding:0px 75px"> A convenience wrapper for classification methods in Python's scikit-learn </h3>
+      <br><br>
+      <a href = "../" style = "display:inline-block">
+          <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "200px" height = "200px">
+      </a>
+      <br><br>
+      <div align = "top" style="padding:50px">
+          <form action = "../about" style = "display:inline-block">
+              <input title = "Read about the Classificator" type="submit" value="Learn More" class="button button1" />
+          </form>
+          <form action = "../configure", style = "display:inline-block">
+              <input title = "Configure and train a model" type="submit" value="Get Started" class="button button1" /> 
+          </form>
+      </div>
+      </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br> 
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

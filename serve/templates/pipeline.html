@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <style>
+    .highlightme { 
+        background-color: #ECF1F2; 
+    }
+    </style>
+    <fieldset class="fieldset-auto-width">
+        <h1> The Pipeline </h1>
+        <h3> What exactly is the classificator doing to build and train a machine learning algorithm? </h3>
+        <br><br>
+        <p align="left" style="width:750px"> 
+        For each classifier chosen at the end of the configuration process, the Classificator builds a unique 
+        machine learning pipieline. These pipelines then have their hyperparmeters optimized using techniques
+        called grid search and cross validation. After each is optimized, they are compared to each other 
+        and the highest performer is chosen. This way the Classificator is left with the best performing
+        version of the best classifier for the problem at hand. That best pipeline is then trained on the 
+        entire input dataset, and saved, so that new records can be passed directly into the pipeline
+        for prediction.
+        <br><br>
+        Let's take a look at the pipeline:
+        </p>
+        <br><br>
+        <img style = "width:1000px" src="{{ url_for('static',filename='images/clf_pipeline.png') }}">
+        <br><br>
+        <p align="left" style="width:750px">
+        The first step of the pipeline is called a MultiTextVectorizer, which is a custom transformer built
+        specifically for the Classificator.  It takes the Classificator configuration as input, as well
+        as a list of fitted text transformers for any feature designated with the 'vectorize' option for 
+        feature handling.  It uses this input to fit OneHotEncoders when necessary, and to impute, standardize
+        and sparsify numeric features when necessary.  Its last step is to combine the entire feature space 
+        and return a single sparse vector at prediction time.
+        <br><br>
+        Next the pipeline comes to a decision.  Did the user request any normalization or standardization?  If so,
+        a Normify step is added, which is another custom transformer used to standard scale and normalize feature
+        vectors.  Regardless of normification, the pipeline decides whether or not it needs to Densify features
+        before passing them to the classifier.  Some classifiers can't handle sparse data, so the classifier knows
+        when it needs to Densify the feature vector or not.
+        <br><br>
+        Finally the pipeline finishes with an estimator, which is the chosen classifier for the given pipeline.  The
+        estimator is fitted using the appropriately pre-processed feature vector.
+        <br><br>
+        In the end fitted pipeline can take 2-Dimensional iterable as input, with raw text and numeric features,
+        and output predicted class or probabilities as desired.  Packaging up all of these steps into a pipeline 
+        has many advantages.  The primary one is for ease of grid search for hyperparameter optimization.  The Classificator
+        builds individual grids for each pipeline, optimizing parametrs at each step of the pipeline, so that they 
+        are optimized globally for the entire pipeline, rather than locally for each step.  Another advantage is 
+        to protect against data leakage between training and test sets.  Finally, using a pipeline makes pickling,
+        saving, and loading much easier and removes room for user error at prediction time.
+        <br><br>
+        Fitting and comparing pipelines is easy when they are packaged up using scikit-learn base classes.  The
+        hyperparameter optimization and model selection process looks like this:
+        <br><br>
+        <img style = "width:1000px" src="{{ url_for('static',filename='images/model_selection.png') }}">
+        <br><br>
+        </p>
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+   <body background="{{ url_for('static',filename='images/background.jpg') }}">
+      <style type="text/css">
+          input, select {
+              width: 100%;
+              padding: 8px 12px;
+              margin: 8px 0;
+              display: inline-block;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              box-sizing: border-box;
+              font-size:12px;
+              vertical-align: top;
+          }
+          p {
+              font-size:12px;
+          }
+          .fieldset-auto-width {
+              display: inline-block;
+              vertical-align: text-top;
+              font-family: sans-serif;
+              border: 5px solid #1F497D;
+              background: #ddd;
+              border-radius: 5px;
+              padding: 15px;
+          }
+          .fieldset_legend {
+              background: #1F497D;
+              color: #fff;
+              padding: 5px 10px ;
+              font-size: 32px;
+              border-radius: 5px;
+              box-shadow: 0 0 0 5px #ddd;
+              text-align: center;
+          }
+          .fieldset_sublegend {
+              background: #1F497D;
+              color: #fff;
+              padding: 5px 10px ;
+              font-size: 20px;
+              border-radius: 5px;
+              box-shadow: 0 0 0 5px #ddd;
+              text-align: center;
+          }
+      </style> 
+      <div>
+          <br><br>
+          <form action = "../dataset" method = "POST" align = "center">
+             <fieldset class="fieldset-auto-width" name = "configuration">
+             <h2 align = "left"> Data Load </h2>
+             <h4 align = "left"> The first step is to load a dataset, and define some locations for dumping output </h4>
+             <br><br>
+             <div>
+             <fieldset class="fieldset-auto-width" title = "File Upload" name = "file_upload">
+                 <legend class = "fieldset_legend"> Upload Training Set </legend>
+                 <p align = "left" style="width:500px"> 
+                 If you need to upload a file to the server you can do it here.  Keep in mind that files that are too big
+                 will be rejected.  To reference an uploaded file later, enter "uploads/my_file_name.csv" 
+                 in the "Train Set Location" box.
+                 Skip this step if your file is in Amazon S3 or already exists on the server.  
+                 </p>
+                 <br>
+                 <iframe src="../upload_file" frameBorder="0"></iframe>
+             </fieldset>
+             </div>
+             <br><br>
+             <div>
+             <fieldset class="fieldset-auto-width" title = "Data storage and training set specifications" name = "data_specs" align = "left">
+                 <legend class = "fieldset_legend"> Data Specs </legend>
+                 <p align = "left" style = "width:500px">
+                 Here you can name your model run (this is important to reference it later) and define your training set
+                 location.  You can reference an uploaded file, a file in S3, or a built in dateset (e.g. just enter 'iris').  
+                 Define an output location so that the Classificator knows where to send validation 
+                 reports and the final pickled model object (this is optional, it will figure something out if you leave it blank).
+                 </p>
+                 <br>
+                 <p title = "Name of model run">
+                 Run Name <input type ="text" title = "Name of model run" pattern = "^[A-Za-z][A-Za-z0-9_]*$" name = "data_specs__run_name" required/></p>
+                 <p title = "Location of training set in S3">  
+                 Train Set Location  <input type = "text" pattern = "^\S*$" name = "data_specs__loc" value = "uploads/tickers.tsv" required/></p>
+                 <input type = "hidden" name = "data_specs__sep" value = "" required/>
+                 <input type = "hidden" name = "data_specs__model_name" value = "model.obj" required/>
+                 <p title = "Output S3 location for pickled model object and training validation reports">  
+                 Output Location <input type ="text" pattern = "^\S*$" name = "data_specs__out_loc"/></p>
+             </fieldset>
+             </div>
+             <p title = "Load dataset">
+                 <input type = "submit" value = "Load Data" class = "button button1" />
+             </p>
+             </fieldset>
+          </form>
+      </div>
+   </body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

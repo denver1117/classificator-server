@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+</head>
+   <body>
+         {% for value in result %}
+               <p> {{ value }} </p>
+         {% endfor %}
+    <br><br>
+    {% if finished == 'yes' %}
+      <form action = "../view_results" method = "POST" align = "left">
+          <input type ="hidden" name = "data_specs__run_name" value = "{{ run_name }}" required/>
+          <p title = "Submit configuration and kick off model training session.">
+          <input type = "submit" value = "View Detailed Results"/>
+          </p>
+      </form>
+    {% endif %}
+   </body>
+</html>

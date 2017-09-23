@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <fieldset class="fieldset-auto-width">
+        <h1> Slow Down There </h1>
+        <br><br>
+        <img src="{{ url_for('static',filename='images/anditsgone.png') }}">
+        <br><br>
+        <p align = "left" style = "width:500px">
+        Something isn't right.  There is either an error with your configuration, or the page
+        you are looking for isn't ready yet, meaning your model is still training or 
+        the run failed. 
+        </p>
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

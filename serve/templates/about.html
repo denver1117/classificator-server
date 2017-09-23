@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <fieldset class="fieldset-auto-width">
+        <h1> About </h1>
+        <p align="left" style="width:750px"> 
+
+	The Classificator is a high level API, wrapping around scikit-learn’s classification suite, whose primary function is to 
+        normalize and automate the process by which common machine learning classification models are trained and validated.  
+        This is specifically in the context of textual feature spaces, which require NLP techniques for preprocessing and vectorization.  
+        There is an additional focus on group cross validation, where labeled groups exist as data features, and variance is known to be smaller within groups.
+        <br><br>
+        <b>Philosophical Motivation</b>
+        <br><br>
+        Data democratization has been more or less achieved within large organizations since the advent of software like Hive, 
+        allowing anyone who can write SQL queries to derive insights from large distributed data sets without having to write MapReduce jobs.  
+        The same can be said for the democratization of hardware with the growing popularity of on-demand cloud services, 
+        offering self service distributed compute clusters using software like Amazon EMR and Qubole.  
+        <br><br>
+        This theme of democratization is attractive, as lowering the barrier of entry into any field necessarily increases access for users within an organization, or as individuals, 
+        and removes bottlenecks that cause many projects to never leave the white board.  In the spirit of rapid prototyping, a tool that democratizes text classification and removes 
+        the redundancy of writing the same code time and time again in a similar problem space, has the ability to vastly improve the number of projects 
+        considered and the speed at which concepts can be proven.
+        <br><br>
+        <b>Technical Features</b>
+        <br><br>
+        <u> Load a dataset</u> <br>
+        - User points to a dataset locally or in Amazon S3 <br>
+        - User defines simple data specs <br>
+        - User defines feature columns, label column and group columns 
+        <br><br>
+        <u> Load a configuration</u> <br>
+        - User specifies preprocessing options, model choices, and hyperparameter grids per model choice <br>
+        - User specifies meta parameters 
+        <br><br>
+        <u>Train and validate various model choices</u> <br>
+        - Uses common cross validation and grid search techniques, and chooses the best model based on a user supplied scoring option <br>
+        - Return validation statistics and save the model <br>
+        - User defines output location for validation report and pickled model object 
+        <br><br>
+        <b>Comparison to Similar Services</b>
+        <br><br>
+	There are many services that offer “machine learning as a service” or “data analytics as a service”.  
+        <br><br>
+        <u>The Classificator has some advantages:</u> <br>
+        - Tailored to text classification problem space <br>
+        - Data is stored in-house for security <br>
+        - Free <br>
+        - Transparent <br>
+        - This is not a black box service.  The code is open source and is entirely built on top of scikit-learn 
+        with clear references to documentation and explanations of algorithms and hyperparameters <br>
+        - User supplies hyperparameter grids for full control over testing and optimization <br>
+        - Focus is on education and learning about different algorithms and their hyperparameters 
+        rather than on writing code. This doesn't replace a data scientist, it empowers them to be more
+        productive and concentrate on algorithms and the feature space rather than on writing code
+        <br><br>
+        <u>And some disadvantages:</u> <br>
+        - Rough UI (not a great UX but gets the job done) <br>
+        - Less exhaustive <br>
+        - Limited to scikit-learn (no tensorflow or focus on deep learning) <br>
+        - Probably fewer high level options <br>
+        - Less turn-key <br>
+        - Will require some thought from the user, however sane defaults are used for a decent outcome for many text classification problems <br>
+        - Some services offer a distributed service for speed. The Classificator could be deployed on multiple compute partitions in practice
+        but there is no built in option for this
+        </p>
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

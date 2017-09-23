@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+   <body background="{{ url_for('static',filename='images/background.jpg') }}">
+      <style type="text/css">
+          input, select {
+              width: 100%;
+              padding: 8px 12px;
+              margin: 8px 0;
+              display: inline-block;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+              box-sizing: border-box;
+              font-size:12px;
+              vertical-align: top;
+          }
+          p {
+              font-size:12px;
+          }
+          .fieldset-auto-width {
+              display: inline-block;
+              vertical-align: text-top;
+              font-family: sans-serif;
+              border: 5px solid #1F497D;
+              background: #ddd;
+              border-radius: 5px;
+              padding: 15px;
+          }
+          .fieldset_legend {
+              background: #1F497D;
+              color: #fff;
+              padding: 5px 10px ;
+              font-size: 32px;
+              border-radius: 5px;
+              box-shadow: 0 0 0 5px #ddd;
+              text-align: center;
+          }
+          .fieldset_sublegend {
+              background: #1F497D;
+              color: #fff;
+              padding: 5px 10px ;
+              font-size: 20px;
+              border-radius: 5px;
+              box-shadow: 0 0 0 5px #ddd;
+              text-align: center;
+          }
+      </style> 
+      <div>
+          <br><br>
+          <form action = "../result" method = "POST" align = "center">
+             <fieldset class="fieldset-auto-width" name = "configuration">
+             <h2 align = "left"> The field configuration went really well </h2>
+             <h4 align = "left"> Now select high level training options, and configure the machine learning pipelines </h4>
+             <p align = "left" style="width:800px">
+             Now that your data is loaded and field methods are defined, it is time to configure the training session.  
+             The Classificator will build a series of ML pipelines, one for each classifier chosen at the bottom.  Each
+             pipeline will contain the same vectorization, feature selection and pre-processing steps. Using the training 
+             specifications, the Classificator will run 
+             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">GridSearchCV</a>
+             using the parameter maps defined along the way, to choose the best 
+             <a href="http://scikit-learn.org/stable/modules/grid_search.html">hyperparameters</a> for each pipeline, 
+             as well as the best pipeline overall.  That final best pipeline will be the final model to be validated
+             and stored for later use.
+             <br><br>
+             If you are new to scikit-learn or to machine learning in general, try the defaults! Almost all of the sections
+             are hyperlinked to scikit-learn documentation or the user guide, wich are both great resources for learning about
+             machine learning and about this specific implementation of these algorithms and pipelines. 
+             </p>
+             <br><br>
+             <fieldset class="fieldset-auto-width" name = "meta_specs" align = "left">
+                 <legend class = "fieldset_legend" title = "High level training system specifications"> Training Specs </legend>
+                 <p style="width:500px"> 
+                 The training specs are used to dial common machine learning training parameters. <br><br> 
+                 -- A single train/test split is used to produce a hold out set for validation done after grid search and model selection is finished. 
+                        The split ratio determines the size of the training set as a ratio of the full input set size. <br> 
+                 -- The random seed is applied to the train/test split as well as the cross validation split for grid search. This allows repeated runs to be performed on the same 
+                        splits by leaving the seed constant. <br> 
+                 -- The K value is used for the cross validation number of folds. <br> 
+                 -- The score is used to choose the best model both within and across classifiers. Scores marked as multi-class will work for multi-class problems or binary problems. 
+                    BE SURE TO SELECT A MULTI-CLASS OPTION FOR MULTI-CLASS PROBLEMS<br>
+                 -- The re-train final choice allows the option to retrain the chosen best model on the entire input set after 
+                        validation statistics are recorded on the hold out set. <br> 
+                 -- The bypass parameter can be used to bypass the vectorization, feature selection and standardization steps.
+                 </p>
+                 <div style = "float:left;padding:10px">
+                 <input type ="hidden" name = "data_specs__run_name" value = "{{run_name}}" required/>
+                 <p title = "Train split size (between 0 and 1)">  
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">Train/Holdout Split Ratio</a> 
+                     <input type = "number" name = "meta_specs__split_ratio" value = 0.8 step = "0.05" min = "0.05" max = "0.95" required/></p>
+                 <p title = "K for KFold cross validation">
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html">K</a>
+                     <input type = "number" name = "meta_specs__k" value = 5 min = "2" required/></p>
+                 <p  title = "Random seed for train/holdout split and for KFold splits">  
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.utils.check_random_state.html">Random Seed</a>
+                     <input type = "number" name = "meta_specs__random_seed" value = 12 required/></p>
+                 <p title = "Number of parallel processes for grid search">
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">Number of Jobs</a>
+                     <input type = "number" name = "meta_specs__n_jobs" value = 1 min = "-1" step = "1" required/></p>
+                 </div>
+                 <div style = "float:left;padding:10px">
+                 <p title = "Score for best model choice in GridSearchCV">  
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html">Score</a>
+                                  <select name = "meta_specs__score"> 
+                                      <option value="F1 (binary)">F1</option>
+                                      <option value="F1 (macro)">F1 Macro (multi-class)</option>
+                                      <option value="F1 (weighted)">F1 Weighted (multi-class)</option>
+                                      <option value="Accuracy">Accuracy (multi-class</option>
+                                      <option value="AUC ROC">AUC ROC</option>
+                                  </select>
+                 </p>
+                 <p title = "Retrain best model choice on the full input set after the best model is chosen and validated">  
+                 Re-Train Final <select name = "meta_specs__train_final"> 
+                                      <option value="1">Yes</option>
+                                      <option value="0">No</option>
+                                  </select>
+                 </p>
+                 <p title = "Bypass all steps except estimator">
+                 Bypass <select name = "meta_specs__bypass">
+                                      <option value="0">No</option>
+                                      <option value="1">Yes</option>
+                                  </select>
+                 </div>
+             </fieldset>
+             <br><br><br>
+             <fieldset class="fieldset-auto-width" name = "vectorizer", align = "left">
+                 <legend class = "fieldset_legend" title = "Handle text features using a vectorizer and feature selection method"> Text Features </legend>
+                 <p style="width:300px">
+                 A two step method is used to handle text features.  This includes vectorization and feature selection.
+                 </p>
+                 <br>
+                 <legend class = "fieldset_sublegend" title = "Configure vectorizer to transform feature columns with designated vectorize method"> Vectorizer </legend>
+                 <p style="width:300px"> 
+                 The vectorizer is used to vectorize any text input whose feature column is 'vectorize'.  
+                 Supply a parameter grid to be passed directly to the vectorizer
+                 during instantiation.  This is not a parameter map for grid search, 
+                 but a parameter map with a single input per argument. Be sure to use 0 or 1
+                 for boolean fields rather than True or False. </p>
+                 <br>
+                 <p title = "Model used for vectorization of text features"> 
+                     <a href="http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html">Model</a> 
+                                  <select name = "vectorizer__model">
+                                      <option value="TF-IDF Vectorizer">TF-IDF</option>
+                                      <option value="Hashing Vectorizer">Hashing</option>
+                                      <option value="Count Vectorizer">Count</option>
+                                  </select>
+                 </p>
+                 <p title = "Parameter map for vectorizer; Consider choosing: ngram_range, stop_words, min_df">  
+                 Parameters <input type ="text" name = "vectorizer__args" value = "{'ngram_range': [1,2], 'min_df': 0.001, 'decode_error': 'ignore', 'analyzer': 'word'}" required/></p>
+                 <br><br>
+                 <legend class = "fieldset_sublegend" title = "Select vectorized features"> Feature Selector </legend>
+                 <p style="width:300px">
+                 The feature selecter implements the 
+                 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFpr.html">Select FPR</a> 
+                 feature selection method.  The parameter map is used in grid search, so multiple options
+                 can be be supplied as a list for each parameter.
+                 <br><br>
+                 For Alpha, enter a single value or multiple values for grid search <br>
+                 <br><br>
+                 <p title = "Feature selection scoring method">  
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFpr.html">Model</a> 
+                                  <select name = "selector__model">
+                                      <option value="Chi-Squared">Chi-Squared</option>
+                                  </select>
+                 </p>
+                 <p title = "Parameter map for selector; Consider tuning: alpha">  
+                 Alpha <input type ="text" name = "selector__grid" value = "0.05" required/></p>
+             </fieldset>
+             <fieldset class="fieldset-auto-width" title = "Standardize or normalize selected features before classification" name = "pre_processors", align = "left">
+                 <legend class = "fieldset_legend"> Pre-Processors </legend>
+                 <p style="width:300px">
+                 The pre-processor is a custom class that allows either 
+                 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">Standard Scaler</a>, 
+                 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MaxAbsScaler.html">Max Scaler</a> or 
+                 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html">Normalizer</a> 
+                 transformers to be applied to the 
+                 data after feature selection as a step in the ML pipeline.  One, both or none of the options can be supplied, 
+                 with multiple choices for grid search. 
+                 <br><br>
+                 Options are Scaler, Max, Normalizer, or None.  Enter one or more options.
+                 <br><br>
+                 <p title = "Choose between standard scaling, normalization, neither, or ordered combinations">  
+                     <a href="http://scikit-learn.org/stable/modules/preprocessing.html">Methods</a> 
+                     <input type ="text" name = "pre_processors__methods" value = "None" required/></p>
+             </fieldset>
+             <br><br><br>
+             <fieldset class="fieldset-auto-width" title = "Classifier choices; enter a grid for parameter search for any desired classifier" name = "classifiers" align = "left">
+                 <legend class = "fieldset_legend"> Classifiers </legend>
+                     <p style="width:800px">
+                     Finally, various classifiers are attempted and the best one is chosen.  Each classifier with any grid in its input box 
+                     (even just empty brackets: {}) will be used.  The classificator takes all of the pre-processing steps (with associated grid search options) 
+                     and generates a ML piipeline with each designated classifier, whose supplied grid search options will be appended to those of the pre-processing steps.  
+                     Then each pipeline is fitted with grid search, and the best performer according to the supplied score will be chosen.  For multi-class problems, a 
+                     <a href="http://scikit-learn.org/stable/modules/generated/sklearn.multiclass.OneVsRestClassifier.html">One vs Rest</a> method is used, where the 
+                     feature selection step is included in the OVR process, so that specific features are selected for each OVR step. Be sure to use 0 or 1
+                     for boolean fields rather than True or False.
+                     </p>
+                     <div style = "float:left;padding:10px">
+                     <legend class = "fieldset_sublegend"> Trees </legend>
+                         <p title = "Consider tuning: min_samples_split, max_depth"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html">Decision Tree</a>
+                             <input type ="text" name = "classifiers__Decision Tree"></p>
+                         <p title = "Consider tuning: min_samples_split, max_depth, max_features, n_estimators"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">Random Forest</a>
+                             <input type ="text" name = "classifiers__Random Forest" value = "{'min_samples_split': [2, 0.01]}"></p>
+                         <p title = "Consider tuning: min_samples_split, max_depth, max_features, n_estimators"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesClassifier.html">Extra Trees</a>
+                             <input type ="text" name = "classifiers__Extra Trees"></p>
+                         <p title = "Consider tuning: min_samples_split, max_depth, max_feature, n_estimators, learning_rate"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html">GB Trees</a>
+                             <input type ="text" name = "classifiers__GB Trees"></p>
+                     <legend class = "fieldset_sublegend"> Neighbors </legend>
+                         <p title = "Consider tuning: n_neighbors">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html">KNN</a>
+                             <input type ="text" name = "classifiers__KNN" value = "{'n_neighbors': [10,100]}"></p>
+                         <p title = "No parameters to tune">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestCentroid.html">Nearest Centroid</a>
+                             <input type ="text" name = "classifiers__Nearest Centroid"></p>
+                     </div>
+                     <div style = "float:left;padding:10px">
+                     <legend class = "fieldset_sublegend"> Linear Models </legend>
+                         <p title = "Consider tuning: C, fit_intercept">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">Logistic Regression</a>
+                             <input type ="text" name = "classifiers__Logistic Regression" value = "{'C': [1.0, 10.0], 'fit_intercept': [0,1]}"></p>
+                         <p title = "Consider tuning: C, fit_intercept">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.PassiveAggressiveClassifier.html">Passive Aggressive</a>
+                             <input type ="text" name = "classifiers__Passive Aggressive"></p>
+                         <p title = "Consider tuning: alpha, fit_intercept">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html">Ridge</a>
+                             <input type ="text" name = "classifiers__Ridge"></p>
+                         <p title = "SGD Classifier">
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDClassifier.html">Stochastic Gradient Descent</a>
+                             <input type ="text" name = "classifiers__Stochastic Gradient Descent"></p>
+                     <legend class = "fieldset_sublegend"> Support Vector Machines </legend>
+                         <p title = "Consider tuning: kernel, C"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">Support Vector Machine</a>
+                             <input type ="text" name = "classifiers__Support Vector Machine"></p>
+                         <p title = "consider tuning: C"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html">Linear SVM</a>
+                             <input type ="text" name = "classifiers__Linear SVM"></p>
+                     </div>
+                     <div style = "float:left;padding:10px">
+                     <legend class = "fieldset_sublegend"> Bayesian </legend>
+                         <p title = "No parameters to tune"> 
+                             <a href="http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html">Gaussian Naive Bayes</a>
+                             <input type ="text" name = "classifiers__Gaussian Naive Bayes"></p>
+                         <p title = "Consider tuning: alpha"> 
+                              <a href="http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html">Multinomial Naive Bayes</a>
+                              <input type ="text" name = "classifiers__Multinomial Naive Bayes"></p>
+                         <p title = "Consider tuning: alpha, binarize"> 
+                              <a href="http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html">Bernoulli Naive Bayes</a>
+                              <input type ="text" name = "classifiers__Bernoulli Naive Bayes"></p>
+                     <legend class = "fieldset_sublegend"> Neural Networks </legend>
+                         <p title = "Consider tuning: hidden_layer_sizes, alpha, activation, solver"> 
+                              <a href="http://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html">Multi-layered Perceptron</a>
+                              <input type ="text" name = "classifiers__Multi-layered Perceptron"></p> 
+                     <legend class = "fieldset_sublegend"> Combined/Voting Estimators </legend>
+                         <p title = "Consider tuning: n_estimators, min_samples_split, max_features">
+                              Combined Estimator
+                              <input type ="text" name = "classifiers__Combined Estimator"></p>
+                     </div>
+             </fieldset>
+             <p title = "Submit configuration and kick off model training session">
+                 <input type = "submit" value = "Train Model" class = "button button1"/>
+             </p>
+             </fieldset>
+          </form>
+      </div>
+   </body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

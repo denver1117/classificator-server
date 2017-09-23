@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <fieldset class="fieldset-auto-width">
+        <h4> Now to Ollie with the status of your model run... </h4>
+        <br><br>
+        <img src="{{ url_for('static',filename='images/itsgontrain.png') }}">
+        <br><br>
+        <p align = "center" title = "See the progress of your model run while you wait for it to finish.">
+          <button style = "align:left" class="button button1" onclick="window.location.href='../projects'">Project Hub</button>
+        </p>
+        <p style = "width:500px">
+        Check out the Project Hub while you wait
+        </p>
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

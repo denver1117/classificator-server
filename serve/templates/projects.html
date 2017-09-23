@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <meta http-equiv="refresh" content="5">
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <style>
+    .highlightme { 
+        background-color: #ECF1F2; 
+    }
+    .data-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+    }
+    .data-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table tbody td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table-highlight tbody tr:hover {
+        background-color: #CCE7E7;
+    }
+    </style>
+    <fieldset class="fieldset-auto-width">
+        <h1> Project Hub </h1>
+        <br><br>
+        <table class="data-table data-table-highlight">
+          <tr>
+            <th> run_name </th>
+            <th> results </th>
+            <th> predictor </th>
+            <th> log link </th>
+            <th> kill </th>
+            <th> alive </th>
+            <th> logs </th>
+          </tr>
+          {% for index in rng %}
+            <tr id = "{{ projects[index] }}">
+              <td> {{ projects[index] }} </td>
+              <td> <a href="../view_results?run_name={{projects[index]}}">results</a> </td>
+              <td> <a href="../predictor?run_name={{projects[index]}}">predictor</a> </td>
+              <td> <a href="../logs?run_name={{projects[index]}}">log link</a> </td>
+              <td> <a href="../kill_run?run_name={{projects[index]}}">kill</a> </td>
+              <td> {{ is_alive_list[index] }} </td>
+              <td> <iframe src="../logs?run_name={{projects[index]}}" frameBorder="0" type="text" height = "250px" width="500px"></iframe></td>
+            </tr>
+          {% endfor %}
+        </table>
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

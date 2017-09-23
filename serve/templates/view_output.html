@@ -1,0 +1,352 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+    input, select {
+        width: 100%;
+        padding: 8px 12px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size:12px;
+        vertical-align: top;
+    }
+    .data-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+    }
+    .data-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table tbody td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table-highlight tbody tr:hover {
+        background-color: #CCE7E7;
+    }
+    #table-wrapper {
+        position:relative;
+    }
+    #table-scroll {
+        height:800px;
+        overflow:auto;  
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    #table-wrapper table {
+        width:100%;
+    }
+    #table-wrapper-hor {
+        position:relative;
+    }
+    #table-scroll-hor {
+        width:1000px;
+        height:350px;
+        overflow:auto;
+        margin-left:20px;
+        margin-right:20px;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    #table-wrapper-hor table {
+        height:100%;
+        width:100%;
+    }
+    /* Style the tab */
+    div.tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+    /* Style the buttons inside the tab */
+    div.tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+    }
+    /* Change background color of buttons on hover */
+    div.tab button:hover {
+        background-color: #ddd;
+    }
+    /* Create an active/current tablink class */
+    div.tab button.active {
+        background-color: #ccc;
+    }
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    /* Style the buttons that are used to open and close the accordion panel */
+    button.accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        transition: 0.4s;
+    }
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    button.accordion.active, button.accordion:hover {
+        background-color: #ddd;
+    }
+    /* Style the accordion panel. Note: hidden by default */
+    div.panel {
+        padding: 0 18px;
+        display: none;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body background="{{ url_for('static',filename='images/background.jpg') }}">
+      <script src="{{ url_for('static',filename='scripts/csv.js') }}"></script>
+      <br><br>
+      <div style = "padding:20px" align = "center">
+      <fieldset class="fieldset-auto-width">
+          <h2 align = "left"> This is the cool part </h2>
+          <h4 align = "left"> View the classification report and check out detailed grid search statistics for each estimator, then look at sample predictions from the hold out set </h4>
+          <br><br>
+          <div align = "left">
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+            <legend class = "fieldset_legend"> Do More Stuff </legend>
+            <button style = "align:left" onclick="exportTableToCSV('output_{{ run_name }}.csv')" class = "button button1">Export All Data</button>
+            <form action = "../configure" method = "GET" align = "left">
+              <button style = "align:left" class = "button button1">New Project</button>
+            </form>
+            <form action = "../projects" method = "GET" align = "left">
+              <button style = "align:left" class = "button button1">Project Hub</button>
+            </form>
+          </fieldset> 
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+              <legend class = "fieldset_legend"> Classification Report </legend>
+                <table class="data-table data-table-highlight">
+                  <tr>
+                  {% for value in clf_report[0] %}
+                  <th> {{ value }} </th>
+                  {% endfor %}
+                  </tr>
+                  {% for value in clf_report[1] %}
+                  <tr>
+                    {% for val in value %}
+                    <td> {{ val }} </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+          </fieldset>
+          <br><br>
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+              <legend class = "fieldset_legend"> Label vs Prediction Crosstabs </legend>
+                <div id="table-wrapper-hor">
+                <div id="table-scroll-hor">
+                <table class="data-table data-table-highlight">
+                  <tr>
+                  {% for value in crosstabs[0] %}
+                  <th> {{ value }} </th>
+                  {% endfor %}
+                  </tr>
+                  {% for value in crosstabs[1] %}
+                  <tr>
+                    {% for val in value %}
+                    <td> {{ val }} </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+                </div>
+                </div>
+          </fieldset>
+          </div>
+          <br><br>
+          <h4 align = "left"> Detailed grid search results </h4>
+          <br>
+          <script>
+              function openCity(evt, cityName) {
+                  // Declare all variables
+                  var i, tabcontent, tablinks;
+
+                  // Get all elements with class="tabcontent" and hide them
+                  tabcontent = document.getElementsByClassName("tabcontent");
+                  for (i = 0; i < tabcontent.length; i++) {
+                      tabcontent[i].style.display = "none";
+                  }
+
+                  // Get all elements with class="tablinks" and remove the class "active"
+                  tablinks = document.getElementsByClassName("tablinks");
+                  for (i = 0; i < tablinks.length; i++) {
+                      tablinks[i].className = tablinks[i].className.replace(" active", "");
+                  }
+
+                  // Show the current tab, and add an "active" class to the button that opened the tab
+                  document.getElementById(cityName).style.display = "block";
+                  evt.currentTarget.className += " active";
+              }
+          </script>
+          {% for key, value in result.items() %}
+          <button class="accordion">{{key}}</button>
+          <div class="panel">
+            <div id = "{{key}}_tabs" class="tab" data-presist="true">
+              {% for subkey in value.keys() %}
+                {% if subkey in ['A', 'main'] %}
+                  <button class="tablinks" onclick="openCity(event, '{{subkey}}_{{key}}')" id="defaultOpen">
+                {% endif %}
+                {% if subkey not in ['A', 'main'] %}
+                  <button class="tablinks" onclick="openCity(event, '{{subkey}}_{{key}}')">
+                {% endif %}
+                  {% if subkey != 'main' %}
+                    Feature Group: {{subkey}}
+                  {% endif %}
+                  {% if subkey == 'main' %}
+                    {{subkey}}
+                  {% endif %}
+                </button>
+              {% endfor %}
+            </div>
+            <script>
+              // Get the element with id="defaultOpen" and click on it
+              document.getElementById("defaultOpen").click();
+            </script>
+            {% for subkey, subvalue in value.items() %}
+              <div id="{{subkey}}_{{key}}" class="tabcontent">
+                <div id="table-wrapper-hor">
+                <div id="table-scroll-hor">
+                <table class="data-table data-table-highlight">
+                  <tr>
+                  {% for col in subvalue[0] %} 
+                  <th> {{ col }} </th>
+                  {% endfor %}
+                  </tr>
+                  {% for row in subvalue[1] %}
+                  <tr>
+                    {% for val in row %}
+                    <td> {{ val }} </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+                </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <script>
+              var acc = document.getElementsByClassName("accordion");
+              var i;
+
+              for (i = 0; i < acc.length; i++) {
+                  acc[i].onclick = function(){
+                      /* Toggle between adding and removing the "active" class,
+                      to highlight the button that controls the panel */
+                      this.classList.toggle("active");
+
+                      /* Toggle between hiding and showing the active panel */
+                      var panel = this.nextElementSibling;
+                      if (panel.style.display === "block") {
+                          panel.style.display = "none";
+                      } else {
+                          panel.style.display = "block";
+                      }
+                  }
+              }
+          </script>
+          <br><br>
+      </fieldset>
+      </div>
+      <br><br>
+      <div align = "center">
+      <fieldset class="fieldset-auto-width">
+          <h3 align = "left"> Sample Predictions</h3>
+          <h4 align = "left"> Inspect a random sample of correct predictions</h4>
+          <br><br>
+          <div id="table-wrapper">
+          <div id="table-scroll">
+          <table class="data-table data-table-highlight">
+            <tr>
+            {% for value in preds[0] %}
+            <th> {{ value }} </th>
+            {% endfor %}
+            </tr>
+            {% for value in preds[1] %}
+            <tr>
+              {% for val in value %}
+              <td> {{ val }} </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+          </div>
+          </div>
+      </fieldset>
+      </div>
+      <br><br>
+      <div align = "center">
+      <fieldset class="fieldset-auto-width">
+          <h3 align = "left"> Sample Predictions</h3>
+          <h4 align = "left"> Inspect a random sample of model errors</h4>
+          <br><br>
+          <div id="table-wrapper">
+          <div id="table-scroll">
+          <table class="data-table data-table-highlight">
+            <tr>
+            {% for value in errors[0] %}
+            <th> {{ value }} </th>
+            {% endfor %}
+            </tr>
+            {% for value in errors[1] %}
+            <tr>
+              {% for val in value %}
+              <td> {{ val }} </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+          </div>
+          </div>
+      </fieldset>
+      </div>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br> 
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

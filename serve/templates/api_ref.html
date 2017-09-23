@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator API</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+    <br><br>
+    <style>
+    .highlightme { 
+        background-color: #ECF1F2; 
+    }
+    </style>
+    <fieldset class="fieldset-auto-width">
+        <h1> API Reference </h1>
+        <p align="left" style="width:750px"> 
+        The API can be accessed directly without using the Classificator UI. A POST
+        sent to the <span class="highlightme">/classificator</span> endpoint with a JSON configuration input 
+        (similar to the <span class="highlightme">config.json</span> example)
+        will execute a model run.  A response of SUCCESS or FAILURE will indicate how the run went.  A FAILURE
+        comes along with the full Python traceback. For example from python:
+        </p>
+        <br>
+        <img src="{{ url_for('static',filename='images/api.png') }}">
+    </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br>
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>

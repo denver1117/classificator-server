@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <title>Classificator</title>
+  <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+  <style>
+    li:hover
+    {
+        background-color:#413D52;
+    }
+    input, select {
+        width: 100%;
+        padding: 8px 12px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size:12px;
+        vertical-align: top;
+    }
+    .data-table {
+        border: solid 1px #DDEEEE;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font: normal 13px Arial, sans-serif;
+    }
+    .data-table thead th {
+        background-color: #DDEFEF;
+        border: solid 1px #DDEEEE;
+        color: #336B6B;
+        padding: 10px;
+        text-align: left;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table tbody td {
+        border: solid 1px #DDEEEE;
+        color: #333;
+        padding: 10px;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .data-table-highlight tbody tr:hover {
+        background-color: #CCE7E7;
+    }
+    #table-wrapper {
+        position:relative;
+    }
+    #table-scroll {
+        height:800px;
+        overflow:auto;  
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    #table-wrapper table {
+        width:100%;
+    
+    }
+  </style>
+  <ul>
+      {% for item in nav.top %}
+      <li class="{{ 'active' if item.is_active else '' }}">
+          <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% endfor %}
+  </ul>
+</head>
+<body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
+      <br><br>
+      <fieldset class="fieldset-auto-width">
+          <h2 align = "left"> Let's Predict Stuff </h2>
+          <h4 align = "left"> Now we can make predictions with a trained model </h4>
+          <br><br>
+          <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+          <legend class = "fieldset_legend"> Make Predictions </legend>
+          <form action="../predictor" method="POST">
+              <input type = "hidden" name = "run_name" value = "{{config['data_specs__run_name']}}" required/>
+              <input type = "hidden" name = "method" value = "predict">
+              {% for value in config['idx'] %}
+              <p> {{ config['data_specs__feature_columns'][value] }}
+                  <input type = "text" name = "{{config['data_specs__feature_columns'][value]}}" value = "{{config['data_specs__prediction_defaults'][value]}}">
+              </p>
+              {% endfor %}
+              <br><br>
+              <p title = "Make a prediction">
+              <input type="submit" value="Predict" class="button button1"></p>
+          </form>
+          <br><br>
+            <fieldset align = "left" class="fieldset-auto-width" style="padding:30px">
+            <legend class = "fieldset_legend"> Prediction </legend>
+              {% for value in prediction_data %}
+                <p style = "width:500px">{{ value }} </p>
+                <br><br>
+              {% endfor %}
+            </fieldset>
+          </fieldset>
+      </fieldset>
+</body>
+<footer align="left" style="display:block">
+  <p style = "color:white">
+  Powered By: <a style = "color:white" href="http://scikit-learn.org/stable/index.html">scikit-learn</a><br> 
+  Established: Aug 2017 <br><br>
+  <a href = "../" style = "display:inline-block">
+      <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "30px" height = "30px">
+  </a>
+  </p>
+</footer>
+</html>
