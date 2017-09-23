@@ -22,8 +22,8 @@ sudo chmod 777 /var/www/html/classificator/logs
 sudo chmod 777 /var/www/html/classificator/file_uploads
 sudo chmod 777 /var/www/html/classificator/configs
 sudo chmod 777 /tmp
-sudo cp $DIRPATH/build/apache_config.txt /etc/apache2/sites-enabled/000-default.conf
+sudo cp build/apache_config.txt /etc/apache2/sites-enabled/000-default.conf
 sudo apachectl restart
 sudo rm -rf /var/log/apache2/error.log
-$PYTHON $DIRPATH/cleanup/cleanup_daemon.py stop
-$PYTHON $DIRPATH/cleanup/cleanup_daemon.py start
+sudo $PYTHON $DIRPATH/cleanup/cleanup_daemon.py stop
+sudo $PYTHON $DIRPATH/cleanup/cleanup_daemon.py start
