@@ -156,7 +156,7 @@ if __name__ == "__main__":
                         help='sleep time (in seconds) between cleanup runs')
     parser.add_argument('-p', '--purge',
                         dest='purge',
-                        default='7+',
+                        default='1+',
                         help='purge time')
     args = parser.parse_args()
     daemon = ClassificatorCleanup(
