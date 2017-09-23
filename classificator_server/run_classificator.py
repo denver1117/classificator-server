@@ -486,7 +486,8 @@ def projects():
         "projects.html", projects=projects, 
         is_alive_list=is_alive_list, rng=rng)
 
-@app.route('/upload_file', methods=['GET', 'POST'])
+# disabled on lite version
+#@app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
     """ Upload file from client """
 
