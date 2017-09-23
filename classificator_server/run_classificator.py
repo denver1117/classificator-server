@@ -51,6 +51,8 @@ nav.Bar('top', [
     nav.Item('About', 'about', {'page': 3}),
     nav.Item('The Pipeline', 'pipeline', {'page': 4}),
     nav.Item('API', 'api_ref', {'page': 5}),
+    nav.Item('Install', 'install', {'page': 5}),
+    nav.Item('Contact', 'contact', {'page': 7}),
 ])
 processes = {}
 
@@ -444,6 +446,19 @@ def about():
     """ Render about page """
 
     return render_template("about.html")
+
+
+@app.route('/install')
+def install():
+    """ Render install page """
+
+    return render_template("install.html")
+
+@app.route('/contact')
+def contact():
+    """ Render contact page """
+
+    return render_template("contact.html")
 
 @app.route('/pipeline')
 def pipeline():

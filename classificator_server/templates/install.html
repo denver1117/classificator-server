@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>API Reference</title>
+  <title>Install</title>
   <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
   <style>
@@ -26,16 +26,16 @@
     }
     </style>
     <fieldset class="fieldset-auto-width">
-        <h1> API Reference </h1>
+        <h1> Install Custom Instances </h1>
         <p align="left" style="width:750px"> 
-        The API can be accessed directly without using the Classificator UI. A POST
-        sent to the <span class="highlightme">/classificator</span> endpoint with a JSON configuration input 
-        (similar to the <span class="highlightme">config.json</span> example)
-        will execute a model run.  A response of SUCCESS or FAILURE will indicate how the run went.  A FAILURE
-        comes along with the full Python traceback. For example from python:
+          To install and build a custom instance of the classificator UI on your own server for your
+          own private network, see 
+          <a href="https://github.com/denver1117/classificator-server">instructions here</a>. 
+          Alternatively the underlying python package is available for 
+          <a href="https://github.com/denver1117/classificator">download as well</a>.
+          Finally, check out the standalone 
+          <a href= "https://github.com/denver1117/predictor">predictor API</a>.
         </p>
-        <br>
-        <img src="{{ url_for('static',filename='images/api.png') }}">
     </fieldset>
 </body>
 <footer align="left" style="display:block">
