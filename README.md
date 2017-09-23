@@ -50,5 +50,5 @@ A pip install will automatically build the web server and serve the application:
 
 To build manually:
 ```
-sh serve/build/build.sh
+sh serve/build/build_apache.sh
 ```
