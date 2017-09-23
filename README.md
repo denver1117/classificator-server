@@ -13,17 +13,21 @@ has extra features that augment the classificator package both before and after 
 
 ### Features
 - Easy build and install
-- Cleanup daemon to purge files on the server and periodically restart
-- Use HTML forms to build configuration from the UI rather than generating a JSON object
-- Infer fields from input data
-- View input data in the UI
-- View summary of input data in the UI
-- Hyperlinks to documentation for education 
-- Suggestions for tuning models for education
-- Name and track model runs and train in parallel to others
-- View persistent log files and validation statistics through the UI
-- View predictions on holdout set
-- Predictor feature to make realtime predictions with a trained model after training
+  - Build web server and fully functional web based UI with a single pip install
+  - Includes cleanup daemon to purge files on the server and periodically restart
+- More features for the end user
+  - Use HTML forms to build configuration from the UI rather than generating a JSON object
+  - Infer fields from input data
+  - View input data in the UI
+  - View summary of input data in the UI
+  - View full feature records and trained model predictions on holdout set
+  - Predictor feature to make realtime predictions with a trained model after training
+- Education
+  - Hyperlinks to documentation for education 
+  - Suggestions for tuning models for education
+- Organization
+  - Name and track model runs and train in parallel to others
+  - View persistent log files and validation statistics through the UI
 
 ### Installation
 
@@ -38,8 +42,13 @@ pip install classificator-server
 
 ### Build
 
-Running the build script on a linux server will do the following:
-- Install (apache web server)[https://httpd.apache.org/]
+A pip install will automatically build the web server and serve the application:
+- Install [apache web server](https://httpd.apache.org/)
 - Build appropriate directories  
 - Build the classificator endpoint (`/var/www/html/classificator`)
 - Serve the `run_classificator.py` flask API at the classificator endpoint
+
+To build manually:
+```
+sh serve/build/build.sh
+```
