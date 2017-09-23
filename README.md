@@ -7,7 +7,7 @@
 # classificator-server : API and UI front-end service for the [classificator](https://github.com/denver1117/classificator) package
 
 ### About
-The classificator-server provides a front-end to the classificator python package.  The API can easily be built and served
+The classificator-server provides a front-end to the [classificator](https://github.com/denver1117/classificator) python package.  The API can easily be built and served
 on any linux server.  The API includes a web based UI which can be accessed from the browser using the public DNS of the host.  The UI
 has extra features that augment the classificator package both before and after training.  The web server was designed and tested with Amazon EC2 in mind as the linux server of choice where organizations or individuals can quickly spin up servers of any size, build the classificator-server, and expose the web based UI to an entire network or to a single IP address.  Full instructions for spinning up a server are [here](https://github.com/denver1117/classificator-server/blob/master/serve/build/README.md).
 
@@ -43,7 +43,7 @@ sh build/build_apache.sh
 
 ### Build
 
-The build automatically build the web server and serve the application:
+The build automatically builds the web server and serve the application:
 - Install [apache web server](https://httpd.apache.org/)
 - Build appropriate directories  
 - Build the classificator endpoint (`/var/www/html/classificator`)
