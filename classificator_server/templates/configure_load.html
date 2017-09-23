@@ -73,13 +73,14 @@
              <fieldset class="fieldset-auto-width" title = "File Upload" name = "file_upload">
                  <legend class = "fieldset_legend"> Upload Training Set </legend>
                  <p align = "left" style="width:500px"> 
-                 If you need to upload a file to the server you can do it here.  Keep in mind that files that are too big
-                 will be rejected.  To reference an uploaded file later, enter "uploads/my_file_name.csv" 
-                 in the "Train Set Location" box.
-                 Skip this step if your file is in Amazon S3 or already exists on the server.  
+                   File uploads are disabled.  Only
+                   one data set is available for the lite version and that is
+                   the default (<b>uploads/movie_metadata.csv</b>).  See
+                   <a href="https://github.com/denver1117/classificator-server">instructions here</a> 
+                   for hosting a full version privately.  The full version can upload files for training
+                   from the client through the UI, or they can be pointed to in S3 given the appropriate
+                   roles/credentials. 
                  </p>
-                 <br>
-                 <iframe src="../upload_file" frameBorder="0"></iframe>
              </fieldset>
              </div>
              <br><br>
@@ -88,19 +89,17 @@
                  <legend class = "fieldset_legend"> Data Specs </legend>
                  <p align = "left" style = "width:500px">
                  Here you can name your model run (this is important to reference it later) and define your training set
-                 location.  You can reference an uploaded file, a file in S3, or a built in dateset (e.g. just enter 'iris').  
-                 Define an output location so that the Classificator knows where to send validation 
-                 reports and the final pickled model object (this is optional, it will figure something out if you leave it blank).
+                 location.
                  </p>
                  <br>
                  <p title = "Name of model run">
                  Run Name <input type ="text" title = "Name of model run" pattern = "^[A-Za-z][A-Za-z0-9_]*$" name = "data_specs__run_name" required/></p>
                  <p title = "Location of training set in S3">  
-                 Train Set Location  <input type = "text" pattern = "^\S*$" name = "data_specs__loc" value = "uploads/movie_metadata.csv" required/></p>
+                 Train Set Location: <b>uploads/movie_metadata.csv</b>  
+                 <input type = "hidden" pattern = "^\S*$" name = "data_specs__loc" value = "uploads/movie_metadata.csv" required/></p>
                  <input type = "hidden" name = "data_specs__sep" value = "" required/>
                  <input type = "hidden" name = "data_specs__model_name" value = "model.obj" required/>
-                 <p title = "Output S3 location for pickled model object and training validation reports">  
-                 Output Location <input type ="text" pattern = "^\S*$" name = "data_specs__out_loc"/></p>
+                 <input type = "hidden" pattern = "^\S*$" name = "data_specs__out_loc"/>
              </fieldset>
              </div>
              <p title = "Load dataset">

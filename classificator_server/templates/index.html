@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Classificator</title>
+  <title>Classificator Lite</title>
   <link rel="icon" type="image/gif/png" href="{{ url_for('static',filename='images/logo.png') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
   <style>
@@ -21,8 +21,12 @@
 <body align = "center" background="{{ url_for('static',filename='images/background.jpg') }}">
       <br><br>
       <fieldset align = "center" class="fieldset-auto-width">
-      <h1 style = "padding:10px;display:inline-block"> Classificator </h1>
+      <h1 style = "padding:10px;display:inline-block"> Classificator Lite </h1>
       <h3 style = "padding:0px 75px"> A convenience wrapper for classification methods in Python's scikit-learn </h3>
+      <h4 style = "padding:0px 75px"> 
+          This is a limited, publicly hosted version of the full classificator application. To host your own
+          full version privately, follow <a href="https://github.com/denver1117/classificator-server">instructions here</a>.
+      </h4>
       <br><br>
       <a href = "../" style = "display:inline-block">
           <img title = "Classificator home" src="{{ url_for('static',filename='images/logo.png') }}" width = "200px" height = "200px">
