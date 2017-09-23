@@ -13,7 +13,7 @@ has extra features that augment the classificator package both before and after 
 
 ### Features
 - Easy build and install
-  - Build web server and fully functional web based UI with a single pip install
+  - Build web server and fully functional web based UI with a single command
   - Includes cleanup daemon to purge files on the server and periodically restart
 - More features for the end user
   - Use HTML forms to build configuration from the UI rather than generating a JSON object
@@ -33,22 +33,18 @@ has extra features that augment the classificator package both before and after 
 
 Source Code: https://github.com/denver1117/classificator-server <br>
 
-Binary installers for the latest released version are available at the Python package index:
+Clone the repo and follow the build instructions:
 
 ```
-# PyPI
-pip install classificator-server
+git clone git@github.com:denver1117/classificator-server.git
+cd classificator-server
+sh build/build_apache.sh
 ```
 
 ### Build
 
-A pip install will automatically build the web server and serve the application:
+The build automatically build the web server and serve the application:
 - Install [apache web server](https://httpd.apache.org/)
 - Build appropriate directories  
 - Build the classificator endpoint (`/var/www/html/classificator`)
 - Serve the `run_classificator.py` flask API at the classificator endpoint
-
-To build manually:
-```
-sh build/build_apache.sh
-```
