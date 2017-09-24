@@ -39,7 +39,7 @@ Source Code: https://github.com/denver1117/classificator-server <br>
 Clone the repo and follow the build instructions:
 
 ```
-git clone git@github.com:denver1117/classificator-server.git
+git clone https://github.com/denver1117/classificator-server.git
 cd classificator-server
 sh build/build_apache.sh
 ```
@@ -51,3 +51,11 @@ The build automatically builds the web server and serve the application:
 - Build appropriate directories  
 - Build the classificator endpoint (`/var/www/html/classificator`)
 - Serve the `run_classificator.py` flask API at the classificator endpoint
+
+### Authors
+
+Evan Harris - Initial work began at [Return Path](https://returnpath.com/)
+
+### License
+
+This project is licensed under the MIT License - see the LICENSE file for details
