@@ -11,6 +11,9 @@ The classificator-server provides a front-end to the [classificator](https://git
 on any linux server.  The API includes a web based UI which can be accessed from the browser using the public DNS of the host.  The UI
 has extra features that augment the classificator package both before and after training.  The web server was designed and tested with Amazon EC2 in mind as the linux server of choice where organizations or individuals can quickly spin up servers of any size, build the classificator-server, and expose the web based UI to an entire network or to a single IP address.  Full instructions for spinning up a server are [here](https://github.com/denver1117/classificator-server/blob/master/serve/build/README.md).
 
+### Classificator Lite
+A very limited version of the classificator server is [publicly hosted here](http://classificator.classificator-lite.com/).
+
 ### Features
 - Easy build and install
   - Build web server and fully functional web based UI with a single command
