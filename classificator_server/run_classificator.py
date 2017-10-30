@@ -652,6 +652,12 @@ def view_results():
         clf_rpt = pd.read_csv("{0}/{1}".format(out_loc, "clf_report_main.tsv"), sep="\t") 
     except:
         clf_rpt = pd.read_csv("{0}/{1}".format(out_loc, "clf_report_combined.tsv"), sep="\t")
+    for index in range(len(clf_rpt))[:-1]:
+        if pd.isnull(clf_rpt["class"].values[index]):
+            try:
+                clf_rpt.loc[index, "class"] = crosstabs[0][index + 1]
+            except:
+                pass
     clf_report = [list(clf_rpt.columns), clf_rpt.values]
     return render_template(
         "view_output.html", result=output, preds=preds, 
