@@ -1,5 +1,6 @@
 Flask-Navigation
 werkzeug
+s3fs
 flask>=0.12.2
 pandas>=0.18.0
 numpy>=1.13.1

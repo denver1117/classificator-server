@@ -543,6 +543,7 @@ def dataset():
     elif "mean" in info.index:
         prediction_defaults = [str(round(info[col]["mean"],2)) for col in info.columns]
     else:
+        info = info.append(pd.DataFrame(index=["mean"]))
         prediction_defaults = [info[col]["top"] for col in info.columns]
     result["data_specs__prediction_defaults"] = dict(zip(info.columns, prediction_defaults))
     write_config(result["data_specs__run_name"], result, mode="w")
